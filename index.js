@@ -12,6 +12,14 @@ module.exports = function (RED) {
             var DEBUG = config.debug;
             const batchOptions = { /*e.g. batch size*/ };
             try {
+
+                //dynamical parametrization: connectionString
+                let connectionString = '';
+                connectionString = node.credentials.connectionString;
+                if (typeof msg.connectionString !== 'undefined' && typeof msg.connectionString === 'string' && msg.connectionString.length > 0) {
+                    connectionString = msg.connectionString;
+                }
+                 
                 const producerClient = new EventHubProducerClient(node.credentials.connectionString, node.credentials.eventHubPath);
                 node.log("connecting the producer client...");
             } catch(err) {
