@@ -8,7 +8,7 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         var node = this;
         let connectionString = '';
-        let eventHubPath = '';
+        let entityName = '';
         let producerClient;
 
         node.on('input', async function (msg) {
@@ -30,20 +30,20 @@ module.exports = function (RED) {
                 }
                 //TODO: check format
 
-                //dynamical parametrization: eventHubPath
-                eventHubPath = '';
-                eventHubPath = node.credentials.eventHubPath;
-                if (typeof msg.eventHubPath !== 'undefined' && typeof msg.eventHubPath === 'string' && msg.eventHubPath.length > 0) {
-                    eventHubPath = msg.eventHubPath;
+                //dynamical parametrization: entityName
+                entityName = '';
+                entityName = node.credentials.entityName;
+                if (typeof msg.entityName !== 'undefined' && typeof msg.entityName === 'string' && msg.entityName.length > 0) {
+                    entityName = msg.entityName;
                 }
                 //TODO: check format
                  
-                producerClient = new EventHubProducerClient(connectionString, eventHubPath);
+                producerClient = new EventHubProducerClient(connectionString, entityName);
                 node.log("connecting the producer client...");
             } catch(err) {
                 if(DEBUG) {
                     node.send(`${err}
-                    eventHubPath:${eventHubPath}
+                    entityName:${entityName}
                     connectionString:${connectionString}`);
                 }
 
@@ -159,7 +159,7 @@ module.exports = function (RED) {
             connectionString: {
                 type: "text"
             },
-            eventHubPath: {
+            entityName: {
                 type: "text"
             }
         }
