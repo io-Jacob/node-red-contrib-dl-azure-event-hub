@@ -11,13 +11,27 @@ module.exports = function (RED) {
         node.on('input', async function (msg) {
             var DEBUG = config.debug;
             const batchOptions = { /*e.g. batch size*/ };
-            const producerClient = new EventHubProducerClient(node.credentials.connectionString, node.credentials.eventHubPath);
-            node.log("connecting the producer client...");
+            try {
+                const producerClient = new EventHubProducerClient(node.credentials.connectionString, node.credentials.eventHubPath);
+                node.log("connecting the producer client...");
+            } catch(err) {
+                if(DEBUG)
+                    node.send(err);
+
+                node.status({
+                    fill: 'red',
+                    shape: 'dot',
+                    text: 'invalid connection string or path'
+                });
+                return null;
+            }
+            
             node.status({
                 fill: 'yellow',
                 shape: 'dot',
                 text: "connecting..."
             });
+
             if(DEBUG === true) {
                 node.warn("open the producerClient connection.");
                 node.warn("producerClient object:");
