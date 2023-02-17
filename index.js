@@ -9,11 +9,18 @@ module.exports = function (RED) {
         var node = this;
         let connectionString = '';
         let eventHubPath = '';
+        let producerClient;
 
         node.on('input', async function (msg) {
             var DEBUG = config.debug;
             const batchOptions = { /*e.g. batch size*/ };
             try {
+
+                node.status({
+                    fill: 'grey',
+                    shape: 'dot',
+                    text: ''
+                });
 
                 //dynamical parametrization: connectionString
                 connectionString = '';
@@ -31,7 +38,7 @@ module.exports = function (RED) {
                 }
                 //TODO: check format
                  
-                const producerClient = new EventHubProducerClient(connectionString, eventHubPath);
+                producerClient = new EventHubProducerClient(connectionString, eventHubPath);
                 node.log("connecting the producer client...");
             } catch(err) {
                 if(DEBUG) {
@@ -131,9 +138,9 @@ module.exports = function (RED) {
             await producerClient.close();
             node.log("Disconnect producer client.");
             node.status({
-                fill: 'grey',
+                fill: 'blue',
                 shape: 'dot',
-                text: "connection closed"
+                text: "sent & closed"
             });
             if(DEBUG === true) {
                 node.warn("close the producerClient connection.");
