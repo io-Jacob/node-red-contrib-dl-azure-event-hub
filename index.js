@@ -23,17 +23,18 @@ module.exports = function (RED) {
 
                 //dynamical parametrization: eventHubPath
                 let eventHubPath = '';
-                connectionString = node.credentials.eventHubPath;
+                eventHubPath = node.credentials.eventHubPath;
                 if (typeof msg.eventHubPath !== 'undefined' && typeof msg.eventHubPath === 'string' && msg.eventHubPath.length > 0) {
                     eventHubPath = msg.eventHubPath;
                 }
                 //TODO: check format
                  
-                const producerClient = new EventHubProducerClient(node.credentials.connectionString, node.credentials.eventHubPath);
+                const producerClient = new EventHubProducerClient(connectionString, eventHubPath);
                 node.log("connecting the producer client...");
             } catch(err) {
-                if(DEBUG)
-                    node.send(err);
+                if(DEBUG) {
+                    node.send(`${err} eventHubPath:${eventHubPath} connectionString:${connectionString}`);
+                }
 
                 node.status({
                     fill: 'red',
