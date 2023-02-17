@@ -35,7 +35,9 @@ module.exports = function (RED) {
                 node.log("connecting the producer client...");
             } catch(err) {
                 if(DEBUG) {
-                    node.send(`${err} eventHubPath:${eventHubPath} connectionString:${connectionString}`);
+                    node.send(`${err}
+                    eventHubPath:${eventHubPath}
+                    connectionString:${connectionString}`);
                 }
 
                 node.status({
