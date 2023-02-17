@@ -19,6 +19,15 @@ module.exports = function (RED) {
                 if (typeof msg.connectionString !== 'undefined' && typeof msg.connectionString === 'string' && msg.connectionString.length > 0) {
                     connectionString = msg.connectionString;
                 }
+                //TODO: check format
+
+                //dynamical parametrization: eventHubPath
+                let eventHubPath = '';
+                connectionString = node.credentials.eventHubPath;
+                if (typeof msg.eventHubPath !== 'undefined' && typeof msg.eventHubPath === 'string' && msg.eventHubPath.length > 0) {
+                    eventHubPath = msg.eventHubPath;
+                }
+                //TODO: check format
                  
                 const producerClient = new EventHubProducerClient(node.credentials.connectionString, node.credentials.eventHubPath);
                 node.log("connecting the producer client...");
