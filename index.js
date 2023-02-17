@@ -7,6 +7,8 @@ module.exports = function (RED) {
         // Create the Node-RED node
         RED.nodes.createNode(this, config);
         var node = this;
+        let connectionString = '';
+        let eventHubPath = '';
 
         node.on('input', async function (msg) {
             var DEBUG = config.debug;
@@ -14,7 +16,7 @@ module.exports = function (RED) {
             try {
 
                 //dynamical parametrization: connectionString
-                let connectionString = '';
+                connectionString = '';
                 connectionString = node.credentials.connectionString;
                 if (typeof msg.connectionString !== 'undefined' && typeof msg.connectionString === 'string' && msg.connectionString.length > 0) {
                     connectionString = msg.connectionString;
@@ -22,7 +24,7 @@ module.exports = function (RED) {
                 //TODO: check format
 
                 //dynamical parametrization: eventHubPath
-                let eventHubPath = '';
+                eventHubPath = '';
                 eventHubPath = node.credentials.eventHubPath;
                 if (typeof msg.eventHubPath !== 'undefined' && typeof msg.eventHubPath === 'string' && msg.eventHubPath.length > 0) {
                     eventHubPath = msg.eventHubPath;
