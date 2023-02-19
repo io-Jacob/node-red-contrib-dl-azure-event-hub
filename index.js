@@ -32,6 +32,12 @@ module.exports = function (RED) {
 
                 //dynamical parametrization: entityName
                 entityName = '';
+                node.warn(node.credentials)
+                if (node.credentials.entityName.length === 0) {
+                    entityName = (connectionString.split(';').pop()).substring('EntityPath='.length);
+                    node.warn(`war leer und nun ${entityName}`)
+                }
+
                 entityName = node.credentials.entityName;
                 if (typeof msg.entityName !== 'undefined' && typeof msg.entityName === 'string' && msg.entityName.length > 0) {
                     entityName = msg.entityName;
@@ -42,9 +48,7 @@ module.exports = function (RED) {
                 node.log("connecting the producer client...");
             } catch(err) {
                 if(DEBUG) {
-                    node.send(`${err}
-                    entityName:${entityName}
-                    connectionString:${connectionString}`);
+                    node.send(`${err}; entityName:${entityName}; connectionString:${connectionString}`);
                 }
 
                 node.status({
