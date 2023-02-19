@@ -28,21 +28,22 @@ module.exports = function (RED) {
                 if (typeof msg.connectionString !== 'undefined' && typeof msg.connectionString === 'string' && msg.connectionString.length > 0) {
                     connectionString = msg.connectionString;
                 }
+
                 //TODO: check format
 
                 //dynamical parametrization: entityName
                 entityName = '';
-                node.warn(node.credentials)
-                if (node.credentials.entityName.length === 0) {
-                    entityName = (connectionString.split(';').pop()).substring('EntityPath='.length);
-                    node.warn(`war leer und nun ${entityName}`)
+                if (node.credentials) {
+                    if (!node.credentials.entityName || node.credentials.entityName.length === 0) {
+                        entityName = (connectionString.split(';').pop()).substring('EntityPath='.length);
+                    } else {
+                        entityName = node.credentials.entityName;
+                    }
                 }
 
-                entityName = node.credentials.entityName;
                 if (typeof msg.entityName !== 'undefined' && typeof msg.entityName === 'string' && msg.entityName.length > 0) {
                     entityName = msg.entityName;
                 }
-                //TODO: check format
                  
                 producerClient = new EventHubProducerClient(connectionString, entityName);
                 node.log("connecting the producer client...");
