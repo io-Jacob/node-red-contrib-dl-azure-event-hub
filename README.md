@@ -10,7 +10,7 @@ Rename your node
 
 ### Connection String (Mandatory):
 Get the connection string from your eventHub instance after setting up the security rules.
-Endpoint=sb://????????.servicebus.windows.net/;SharedAccessKey=????????;EntityPath=????????
+Endpoint=sb://SOME_EVENT_HUBS_SERVICE_NAME.servicebus.windows.net/;SharedAccessKey=SOME_SHARED_ACCESS_KEY>;EntityPath=SOME_EVENT_HUB_ENTITY
 
 ### Event Hub path (Mandatory):
 Address path of the eventHub to which the messages should be addressed.
