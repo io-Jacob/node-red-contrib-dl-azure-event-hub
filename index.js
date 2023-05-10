@@ -8,6 +8,9 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         var node = this;
         let connectionString = '';
+        let connection = {
+            
+        };
         let entityName = '';
         let producerClient;
 
@@ -30,6 +33,28 @@ module.exports = function (RED) {
                 }
 
                 //TODO: check format
+                /*
+                (?<endpoint>\w*[e|E]ndpoint=[^;]+)
+                Regex (?<endpoint>Endpoint=.+;)(?<sasname>SharedAccessKeyName=.+;)(?<saskey>SharedAccessKey=.+;)(?<entity>EntityPath=.+)
+                Endpoint=sb://dpd-data.servicebus.windows.net/;SharedAccessKeyName=Test;SharedAccessKey=GQg/uDB68vXT2DoiOUbSQPJ+Gv5owAOKFibrQS5UZ7o=;EntityPath=test-daten
+                Endpoint=sb://dpd-data.servicebus.windows.net/;SharedAccessKey=GQg/uDB68vXT2DoiOUbSQPJ+Gv5owAOKFibrQS5UZ7o=;EntityPath=test-daten
+                FileEndpoint=sb://dpd-data.servicebus.windows.net/;SharedAccessKeyName=Test;SharedAccessKey=GQg/uDB68vXT2DoiOUbSQPJ+Gv5owAOKFibrQS5UZ7o=;EntityPath=test-daten
+                BlobEndpoint=sb://dpd-data.servicebus.windows.net/;SharedAccessKeyName=Test;SharedAccessKey=GQg/uDB68vXT2DoiOUbSQPJ+Gv5owAOKFibrQS5UZ7o=;EntityPath=test-daten
+                BlobEndpoint=https://storagesample.blob.core.windows.net;SharedAccessSignature=sv=2015-04-05&amp;sr=b&amp;si=tutorial-policy-635959936145100803&amp;sig=9aCzs76n0E7y5BpEi2GvsSv433BZa22leDOZXX%2BXXIU%3D
+                BlobEndpoint=https://storagesample.blob.core.windows.net;FileEndpoint=https://storagesample.file.core.windows.net;SharedAccessSignature=sv=2015-07-08&sig=iCvQmdZngZNW%2F4vw43j6%2BVz6fndHF5LI639QJba4r8o%3D&spr=https&st=2016-04-12T03%3A24%3A31Z&se=2016-04-13T03%3A29%3A31Z&srt=s&ss=bf&sp=rwl
+                DefaultEndpointsProtocol=[http|https];BlobEndpoint=myBlobEndpoint;FileEndpoint=myFileEndpoint;QueueEndpoint=myQueueEndpoint;TableEndpoint=myTableEndpoint;AccountName=myAccountName;AccountKey=myAccountKey;SharedAccessKeyName=Test;SharedAccessKey=GQg/uDB68vXT2DoiOUbSQPJ+Gv5owAOKFibrQS5UZ7o=;EntityPath=test-daten;Endpoint=www.google.de;                
+                */
+
+                //extract info from connectionstring
+                const regex = new RegExp(/(?<endpoint>Endpoint=.+;)(?<sasname>SharedAccessKeyName=.+;)(?<saskey>SharedAccessKey=.+;)(?<entity>EntityPath=.+)/);
+                let match = connectionString.match(regex);
+                if (match && match.groups && Object.keys(match.groups).length) {
+                    
+                } else {
+                    if(DEBUG) {
+                        node.send(`${err}; entityName:${entityName}; connectionString:${connectionString}`);
+                    }
+                }
 
                 //dynamical parametrization: entityName
                 entityName = '';
